@@ -1,0 +1,22 @@
+{
+    "name": "piece-of-kake/validator",
+    "description": "OO validator",
+    "type": "project",
+    "require": {
+        "piece-of-kake/value-object": "^1.0",
+        "piece-of-kake/exception": "^1.0",
+        "php": ">=7.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sasa Andjelic",
+            "email": "sasasmail@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PoK\\Validator\\": "src/"
+        }
+    }
+}
