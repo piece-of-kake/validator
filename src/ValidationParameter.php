@@ -2,6 +2,8 @@
 
 namespace PoK\Validator;
 
+use PoK\Validator\Sanitizers\CanSanitize;
+
 class ValidationParameter
 {
 
@@ -14,6 +16,7 @@ class ValidationParameter
     private $castClass;
     private $makeClass;
     private $validValues;
+    private $sanitizers = [];
 
     public function name(string $name): ValidationParameter
     {
@@ -42,6 +45,22 @@ class ValidationParameter
     public function hasDefault(): bool
     {
         return $this->hasDefault;
+    }
+
+    public function sanitizer(CanSanitize $sanitizer): ValidationParameter
+    {
+        $this->sanitizers[] = $sanitizer;
+        return $this;
+    }
+
+    public function hasSanitizers(): bool
+    {
+        return !empty($this->sanitizers);
+    }
+
+    public function getSanitizers(): array
+    {
+        return $this->sanitizers;
     }
 
     public function validator(string $validatorClass): ValidationParameter

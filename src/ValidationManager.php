@@ -43,6 +43,7 @@ class ValidationManager
     {
         $this
             ->setDefaults($request)
+            ->sanitize($request)
             ->setMissing($request)
             ->setInvalid($request)
             ->setDependencies($request);
@@ -70,8 +71,24 @@ class ValidationManager
     {
         $this->missing = [];
         foreach ($this->parameters as $key => $parameter) {
+            /** @var ValidationParameter $parameter */
             if ($parameter->hasDefault() && !$request->hasParameter($key))
                 $request->setParameter($parameter->getName(), $parameter->getDefault());
+        }
+        return $this;
+    }
+
+    private function sanitize(ParameterManipulationInterface $request): ValidationManager
+    {
+        foreach ($this->parameters as $key => $parameter) {
+            /** @var ValidationParameter $parameter */
+            if ($parameter->hasSanitizers()) {
+                $value = $request->getParameter($key);
+                foreach ($parameter->getSanitizers() as $sanitizer) {
+                    $value = $sanitizer->sanitize($value);
+                }
+                $request->setParameter($key, $value);
+            }
         }
         return $this;
     }
