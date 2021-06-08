@@ -9,6 +9,8 @@ Example:
                 $parameter
                     ->name('age')
                     ->required()
+                    ->sanitizer(IntegerSanitizer::class)
+                    ->sanitizer(SomeOtherSanitizer::class)
                     ->validator(AgeValidator::class)
                     ->depends(function(ValidationDependency $dependency) {
                         $dependency
