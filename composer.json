@@ -3,8 +3,8 @@
     "description": "OO validator",
     "type": "project",
     "require": {
-        "piece-of-kake/value-object": "^1.0",
-        "piece-of-kake/exception": "^1.0",
+        "piece-of-kake/value-object": "dev-main",
+        "piece-of-kake/exception": "dev-main",
         "php": ">=7.1"
     },
     "license": "MIT",
