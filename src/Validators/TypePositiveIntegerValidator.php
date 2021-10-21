@@ -2,8 +2,8 @@
 
 namespace PoK\Validator\Validators;
 
+use PoK\Validator\Exception\ValueOutOfBoundsException;
 use PoK\Validator\Validator;
-use PoK\ValueObject\Exception\ValueOutOfBoundsException;
 use PoK\ValueObject\TypePositiveInteger;
 
 class TypePositiveIntegerValidator extends Validator
