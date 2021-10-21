@@ -6,6 +6,7 @@ use PoK\Validator\Request\ParameterManipulationInterface;
 use PoK\ValueObject\Collection;
 use PoK\Validator\Exception\ValidationException;
 use PoK\Validator\Exception\InvalidValidatorClassException;
+use PoK\ValueObject\Exception\ValueOutOfBoundsException;
 
 class ValidationManager
 {
@@ -15,6 +16,7 @@ class ValidationManager
     private $missing = [];
     // Invalid fields
     private $invalid = [];
+    private $outOfBounds = []; // When valid values are set for a specific parameter
     // Broken dependencies
     private $must = [];
     private $mustNot = [];
@@ -45,7 +47,7 @@ class ValidationManager
             ->setDefaults($request)
             ->sanitize($request)
             ->setMissing($request)
-            ->setInvalid($request)
+            ->validateParameters($request)
             ->setDependencies($request);
 
         $errors = new Collection([]);
@@ -56,6 +58,7 @@ class ValidationManager
         if (!empty($this->orRequires)) $errors['or_requires'] = $this->orRequires;
         if (!empty($this->requireIfEqual)) $errors['require_if_equal'] = $this->requireIfEqual;
         if (!empty($this->different)) $errors['different'] = $this->different;
+        if (!empty($this->outOfBounds)) $errors['out_of_bounds'] = $this->outOfBounds;
 
         if (!$errors->isEmpty())
             throw new ValidationException($errors);
@@ -170,7 +173,7 @@ class ValidationManager
         return $this;
     }
 
-    private function setInvalid(ParameterManipulationInterface $request)
+    private function validateParameters(ParameterManipulationInterface $request)
     {
         $this->invalid = [];
         foreach ($this->parameters as $key => $parameter) {
@@ -181,6 +184,8 @@ class ValidationManager
                 try {
                     if ($parameter->hasValidValues()) $validator->setValidValues($parameter->getValidValues());
                     $validator->validate();
+                } catch (ValueOutOfBoundsException $exception) {
+                    $this->outOfBounds[$key] = $exception->getMessage();
                 } catch (\Exception $exception) {
                     $this->invalid[$key] = $exception->getMessage();
                 }
