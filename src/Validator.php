@@ -20,6 +20,7 @@ abstract class Validator
     public function setValidValues(array $values)
     {
         $this->validValues = $values;
+        return $this;
     }
     
     protected function hasValidValues(): bool

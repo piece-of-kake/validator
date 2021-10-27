@@ -2,11 +2,11 @@
 
 namespace PoK\Validator;
 
+use PoK\Validator\Exception\ValueOutOfBoundsException;
 use PoK\Validator\Request\ParameterManipulationInterface;
 use PoK\ValueObject\Collection;
 use PoK\Validator\Exception\ValidationException;
 use PoK\Validator\Exception\InvalidValidatorClassException;
-use PoK\ValueObject\Exception\ValueOutOfBoundsException;
 
 class ValidationManager
 {
