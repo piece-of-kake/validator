@@ -186,7 +186,7 @@ class ValidationManager
                     $validator->validate();
                 } catch (ValueOutOfBoundsException $exception) {
                     $this->outOfBounds[$key] = $exception->getMessage();
-                } catch (\Exception $exception) {
+                } catch (\Throwable $exception) {
                     $this->invalid[$key] = $exception->getMessage();
                 }
             }

@@ -14,7 +14,7 @@ class TypePositiveIntegerArrayValidator extends ArrayValidator
             foreach ($this->getValue() as $value) {
                 new TypePositiveInteger($value);
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new InvalidPositiveIntegerArrayException();
         }
     }
