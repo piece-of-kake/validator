@@ -65,6 +65,7 @@ class ValidationManager
 
         $this
             ->castValues($request)
+            ->castCollectionValues($request)
             ->makeValues($request);
 
         return $this;
@@ -200,6 +201,21 @@ class ValidationManager
             if ($parameter->hasCastClass() && $request->hasParameter($key)) {
                 $castClass = $parameter->getCastClass();
                 $request->setParameter($key, new $castClass($request->getParameter($key)));
+            }
+        }
+        return $this;
+    }
+
+    private function castCollectionValues(ParameterManipulationInterface $request)
+    {
+        foreach ($this->parameters as $key => $parameter) {
+            if ($parameter->hasCastCollectionClass() && $request->hasParameter($key) && is_array($request->getParameter($key))) {
+                $castClass = $parameter->getCastCollectionClass();
+                $collection = new Collection([]);
+                foreach ($request->getParameter($key) as $value) {
+                    $collection[] = new $castClass($value);
+                }
+                $request->setParameter($key, $collection);
             }
         }
         return $this;

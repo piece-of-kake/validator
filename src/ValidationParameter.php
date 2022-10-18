@@ -14,6 +14,7 @@ class ValidationParameter
     private $validatorClass;
     private $dependencies = [];
     private $castClass;
+    private $castCollectionClass;
     private $makeClass;
     private $validValues;
     private $sanitizers = [];
@@ -99,6 +100,12 @@ class ValidationParameter
         return $this;
     }
 
+    public function castToCollectionOf(string $castClass): ValidationParameter
+    {
+        $this->castCollectionClass = $castClass;
+        return $this;
+    }
+
     public function make(string $reconstituteClass): ValidationParameter
     {
         $this->makeClass = $reconstituteClass;
@@ -128,6 +135,16 @@ class ValidationParameter
     public function getCastClass(): string
     {
         return $this->castClass;
+    }
+
+    public function hasCastCollectionClass(): bool
+    {
+        return (bool) $this->castCollectionClass;
+    }
+
+    public function getCastCollectionClass(): string
+    {
+        return $this->castCollectionClass;
     }
 
     public function hasMakeClass(): bool
