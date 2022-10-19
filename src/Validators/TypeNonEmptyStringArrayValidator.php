@@ -2,11 +2,12 @@
 
 namespace PoK\Validator\Validators;
 
-use PoK\Validator\Exception\InvalidPositiveIntegerArrayException;
+use PoK\Validator\Exception\InvalidNonEmptyStringArrayException;
 use PoK\Validator\Exception\ValueOutOfBoundsException;
-use PoK\ValueObject\TypePositiveInteger;
+use PoK\ValueObject\Exception\EmptyStringException;
+use PoK\ValueObject\TypeString;
 
-class TypePositiveIntegerArrayValidator extends ArrayValidator
+class TypeNonEmptyStringArrayValidator extends ArrayValidator
 {
     public function validate()
     {
@@ -15,12 +16,14 @@ class TypePositiveIntegerArrayValidator extends ArrayValidator
             foreach ($this->getValue() as $value) {
                 if ($this->hasValidValues())
                     if (!in_array($value, $this->getValidValues())) throw new ValueOutOfBoundsException();
-                new TypePositiveInteger($value);
+
+                new TypeString($value);
+                if ((string) $value === '') throw new EmptyStringException();
             }
         } catch (ValueOutOfBoundsException $exception) {
             throw $exception;
         } catch (\Throwable $exception) {
-            throw new InvalidPositiveIntegerArrayException();
+            throw new InvalidNonEmptyStringArrayException();
         }
     }
 }
